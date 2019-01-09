@@ -1,22 +1,32 @@
 /**
  * WordPress dependencies
  */
-import { RawHTML } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Disabled, SVG, Polygon, Rect } from '@wordpress/components';
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { BlockControls } from '@wordpress/editor';
 import { compose, withState } from '@wordpress/compose';
+
+/**
+ * Internal dependencies
+ */
 import CodeEditor from './code-editor';
+import FormattedHTML from './formatted-html';
 
 const name = 'code-editor-blocks/html';
 
 const settings = {
-	title: __( 'Custom HTML', 'code-editor-blocks' ),
+	title: __( 'Custom HTML (Code Editor Blocks)', 'code-editor-blocks' ),
 
 	description: __( 'Add custom HTML code and preview it as you edit.', 'code-editor-blocks' ),
 
-	icon: <SVG xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96"><Polygon points="66.12 66.12 61.88 61.88 75.76 48 61.88 34.12 66.12 29.88 84.24 48 66.12 66.12" /><Polygon points="29.88 66.12 11.76 48 29.88 29.88 34.12 34.12 20.24 48 34.12 61.88 29.88 66.12" /><Rect x="15.02" y="45" width="65.97" height="6" transform="translate(-10.21 82.93) rotate(-75.97)" /></SVG>,
+	icon: (
+		<SVG xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+			<Polygon points="70.8,66.8 65.2,61.2 78.3,48 65.2,34.8 70.8,29.2 89.7,48 " />
+			<Polygon points="25.2,66.8 6.3,48 25.2,29.2 30.8,34.8 17.7,48 30.8,61.2 " />
+			<Rect x="23.3" y="44" transform="matrix(0.2424 -0.9702 0.9702 0.2424 -10.2054 82.9303)" width="49.5" height="8" />
+		</SVG>
+	),
 
 	category: 'formatting',
 
@@ -24,8 +34,6 @@ const settings = {
 
 	supports: {
 		align: [ 'wide', 'full' ],
-		customClassName: false,
-		className: false,
 		html: false,
 	},
 
@@ -54,9 +62,9 @@ const settings = {
 		],
 	},
 
-	edit: compose( [
-		withState( { isPreview: false } ),
-	] )( ( { attributes, setAttributes, setState, isPreview, clientId, className } ) => {
+	edit: compose(
+		withState( { isPreview: false } )
+	)( ( { attributes, setAttributes, setState, isPreview, clientId, className } ) => {
 		const blockControls = (
 			<BlockControls>
 				<div className="components-toolbar">
@@ -76,12 +84,14 @@ const settings = {
 			</BlockControls>
 		);
 		return (
-			<div className="wp-block-html">
+			<div className="wp-block-html code-editor-blocks-html">
 				{ blockControls }
 				<Disabled.Consumer>
 					{ ( isDisabled ) => (
 						( isPreview || isDisabled ) ? (
-							<RawHTML className={ className }>{ attributes.content }</RawHTML>
+							<FormattedHTML className={ className }>
+								{ attributes.content }
+							</FormattedHTML>
 						) : (
 							<CodeEditor
 								id={ `editor-${ clientId }` }
@@ -97,10 +107,14 @@ const settings = {
 			</div>
 		);
 	} ),
-	save: ( { attributes, className } ) => (
-		<RawHTML className={ className }>{ attributes.content }</RawHTML>
+	save: ( { attributes, className } ) => {
+		return (
+			<FormattedHTML className={ className }>
+				{ attributes.content }
+			</FormattedHTML>
 
-	),
+		);
+	},
 };
 
 registerBlockType( name, settings );
