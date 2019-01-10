@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Disabled, SVG, Polygon, Rect } from '@wordpress/components';
+import { Disabled, SVG, Polygon, Rect, Placeholder } from '@wordpress/components';
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { BlockControls } from '@wordpress/editor';
 import { compose, withState } from '@wordpress/compose';
@@ -86,24 +86,33 @@ const settings = {
 				</div>
 			</BlockControls>
 		);
+
+		const Content = ( attributes.content ) ? (
+			<FormattedHTML className={ className }>
+				{ attributes.content }
+			</FormattedHTML>
+		) : (
+			<Placeholder >
+				{ __( 'No Content', 'code-editor-blocks' ) }
+			</Placeholder>
+		);
+
+		const Editor = (
+			<CodeEditor
+				id={ `editor-${ clientId }` }
+				value={ attributes.content }
+				onChange={ ( content ) => setAttributes( { content } ) }
+				placeholder={ __( 'Write HTML…' ) }
+				aria-label={ __( 'HTML' ) }
+			/>
+		);
+
 		return (
 			<div className="wp-block-html code-editor-blocks-html">
 				{ blockControls }
 				<Disabled.Consumer>
 					{ ( isDisabled ) => (
-						( isPreview || isDisabled ) ? (
-							<FormattedHTML className={ className }>
-								{ attributes.content }
-							</FormattedHTML>
-						) : (
-							<CodeEditor
-								id={ `editor-${ clientId }` }
-								value={ attributes.content }
-								onChange={ ( content ) => setAttributes( { content } ) }
-								placeholder={ __( 'Write HTML…' ) }
-								aria-label={ __( 'HTML' ) }
-							/>
-						)
+						( isPreview || isDisabled ) ? Content : Editor
 					) }
 				</Disabled.Consumer>
 
@@ -112,7 +121,7 @@ const settings = {
 	} ),
 	save: ( { attributes, className } ) => {
 		return (
-			<FormattedHTML className={className}>
+			<FormattedHTML className={ className }>
 				{ attributes.content }
 			</FormattedHTML>
 
