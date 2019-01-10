@@ -6,6 +6,7 @@ import { Disabled, SVG, Polygon, Rect } from '@wordpress/components';
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { BlockControls } from '@wordpress/editor';
 import { compose, withState } from '@wordpress/compose';
+import { RawHTML } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -33,7 +34,9 @@ const settings = {
 	keywords: [ __( 'embed' ), __( 'html' ) ],
 
 	supports: {
-		align: [ 'wide', 'full' ],
+		align: [ 'full' ],
+		//customClassName: false,
+		//className: false,
 		html: false,
 	},
 
@@ -109,7 +112,7 @@ const settings = {
 	} ),
 	save: ( { attributes, className } ) => {
 		return (
-			<FormattedHTML className={ className }>
+			<FormattedHTML className={className}>
 				{ attributes.content }
 			</FormattedHTML>
 

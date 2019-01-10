@@ -1,10 +1,13 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
-import { SVG, Polygon, Rect } from '@wordpress/components';
+import { SVG, Path, PanelBody, SelectControl } from '@wordpress/components';
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 
+import { __, sprintf } from '@wordpress/i18n';
+import {
+	InspectorControls,
+} from '@wordpress/editor';
 /**
  * Internal dependencies
  */
@@ -15,15 +18,10 @@ const name = 'code-editor-blocks/code';
 const settings = {
 	title: __( 'Code (Code Editor Blocks)', 'code-editor-blocks' ),
 
-	description: __( 'Add custom HTML code and preview it as you edit.', 'code-editor-blocks' ),
+	description: __( 'Display code snippets that respect your spacing and tabs.', 'code-editor-blocks' ),
 
-	icon: (
-		<SVG xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
-			<Polygon points="70.8,66.8 65.2,61.2 78.3,48 65.2,34.8 70.8,29.2 89.7,48 " />
-			<Polygon points="25.2,66.8 6.3,48 25.2,29.2 30.8,34.8 17.7,48 30.8,61.2 " />
-			<Rect x="23.3" y="44" transform="matrix(0.2424 -0.9702 0.9702 0.2424 -10.2054 82.9303)" width="49.5" height="8" />
-		</SVG>
-	),
+	icon: <SVG viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><Path d="M0,0h24v24H0V0z" fill="none" /><Path
+		d="M9.4,16.6L4.8,12l4.6-4.6L8,6l-6,6l6,6L9.4,16.6z M14.6,16.6l4.6-4.6l-4.6-4.6L16,6l6,6l-6,6L14.6,16.6z" /></SVG>,
 
 	category: 'formatting',
 
@@ -38,6 +36,13 @@ const settings = {
 			type: 'string',
 			source: 'text',
 			selector: 'code',
+		},
+		mode: {
+			type: 'string',
+			source: 'attribute',
+			selector: 'pre',
+			attribute: 'data-lang',
+			default: 'htmlmixed',
 		},
 	},
 
@@ -59,10 +64,35 @@ const settings = {
 	},
 
 	edit: ( { attributes, setAttributes, clientId, className } ) => {
+		const title = sprintf( __( '%s Block Seetting', 'code-editor-blocks' ) );
+
+		const ModeControls = (
+			<SelectControl
+				label="Mode"
+				value={ attributes.mode }
+				options={ [
+					{ value: 'htmlmixed', label: 'HTML' },
+					{ value: 'text/css', label: 'CSS' },
+					{ value: 'javascript', label: 'JavaScript' },
+				] }
+				onChange={ ( value ) => {
+					setAttributes( { mode: value ? value : undefined } );
+				} }
+			/>
+		);
+		const inspectorControls = (
+			<InspectorControls>
+				<PanelBody title={ title }>
+					{ ModeControls }
+				</PanelBody>
+			</InspectorControls>
+		);
+
 		return (
 			<div className={ `wp-block-code code-editor-blocks-code ${ className }` }>
+				{ inspectorControls }
 				<CodeEditor
-					mode="javascript"
+					mode={ attributes.mode }
 					id={ `editor-${ clientId }` }
 					value={ attributes.content }
 					onChange={ ( content ) => setAttributes( { content } ) }
@@ -74,8 +104,9 @@ const settings = {
 	},
 	save: ( { attributes, className } ) => {
 		return (
-			<div className={ `wp-block-code code-editor-blocks-code ${ className }` }>
-				<pre><code>{ attributes.content }</code></pre>
+			<div
+				className={ `wp-block-code code-editor-blocks-code ${ className }` }>
+				<pre data-lang={ attributes.mode }><code>{ attributes.content }</code></pre>
 			</div>
 		);
 	},

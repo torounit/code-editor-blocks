@@ -36,9 +36,10 @@ docker
 docker-compose.yml
 yarn.lock
 tests
+test
+*.test.js
 vendor
 node_modules
 *.sql
 *.tar.gz
 *.zip
-*.test.js

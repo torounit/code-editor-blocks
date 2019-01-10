@@ -52,6 +52,15 @@
     "@wordpress/element": "^2.1.8",
     "@wordpress/i18n": "^3.1.0",
     "@wordpress/url": "^2.3.2",
+    "codemirror": "^5.42.2",
     "xss": "^1.0.3"
+  },
+  "release-it": {
+    "github": {
+      "release": true
+    },
+    "npm": {
+      "publish": false
+    }
   }
 }

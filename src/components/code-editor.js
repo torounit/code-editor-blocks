@@ -4,13 +4,13 @@
 import { Component } from '@wordpress/element';
 import { PlainText } from '@wordpress/editor';
 
-const { wp } = window;
-
 /**
  * @typedef {object} wp.codeEditor~CodeEditorInstance
  * @property {object} settings - The code editor settings.
  * @property {CodeMirror} codemirror - The CodeMirror instance.
  */
+
+const { wp } = window;
 
 /**
  * wp.codeEditor
@@ -44,9 +44,12 @@ export default class CodeEdit extends Component {
 		this.editor = null;
 	}
 
-	componentDidUpdate( _, prevState ) {
+	componentDidUpdate( prevProps, prevState ) {
 		if ( prevState.value !== this.editor.codemirror.doc.getValue() ) {
 			this.updateValue();
+		}
+		if ( prevProps.mode !== this.props.mode ) {
+			this.editor.codemirror.setOption( 'mode', this.props.mode );
 		}
 	}
 

@@ -14,7 +14,7 @@ add_action(
 		wp_add_inline_style( 'code-editor', '.CodeMirror { font-size: 14px }' );
 		wp_enqueue_script(
 			'code-editor-blocks',
-			plugins_url( 'dist/main.js', PLUGIN_FILE ),
+			plugins_url( 'dist/blocks.js', PLUGIN_FILE ),
 			[
 				'wp-blocks',
 				'wp-components',
@@ -30,3 +30,4 @@ add_action(
 		);
 	}
 );
+

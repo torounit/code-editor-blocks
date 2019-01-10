@@ -13,9 +13,14 @@ HTML Editor Blocks with Code Editor.
 
 == Description ==
 
+= Custom HTML Block =
+
+Custom HTML Editor Blocks with Code Editor.
+
 = Blocks =
 
-* Custom HTML Block.
+* Custom HTML Block filtered script tag.
+* Code Block.
 
 == Changelog ==
 
