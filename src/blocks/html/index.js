@@ -6,7 +6,6 @@ import { Disabled, SVG, Polygon, Rect, Placeholder } from '@wordpress/components
 import { createBlock, registerBlockType } from '@wordpress/blocks';
 import { BlockControls } from '@wordpress/editor';
 import { compose, withState } from '@wordpress/compose';
-import { RawHTML } from '@wordpress/element';
 
 /**
  * Internal dependencies
