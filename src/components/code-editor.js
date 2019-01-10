@@ -73,6 +73,7 @@ export default class CodeEdit extends Component {
 		} );
 		this.updateValue();
 		this.editor.codemirror.on( 'keyHandled', ( cm, name, event ) => event.stopPropagation() );
+		this.editor.codemirror.on( 'change', () => this.updateValue() );
 	}
 
 	render() {
