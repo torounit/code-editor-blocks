@@ -10,8 +10,8 @@ import { compose, withState } from '@wordpress/compose';
 /**
  * Internal dependencies
  */
-import CodeEditor from './code-editor';
-import FormattedHTML from './formatted-html';
+import CodeEditor from '../../components/code-editor';
+import FormattedHTML from '../../components/formatted-html';
 
 const name = 'code-editor-blocks/html';
 

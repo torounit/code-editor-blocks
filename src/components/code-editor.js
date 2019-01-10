@@ -20,7 +20,6 @@ const { wp } = window;
 const { codeEditor } = wp;
 
 export default class CodeEdit extends Component {
-
 	constructor( props ) {
 		super( props );
 		this.state = {
@@ -61,7 +60,14 @@ export default class CodeEdit extends Component {
 	}
 
 	initialize() {
-		this.editor = codeEditor.initialize( this.props.id );
+		const mode = this.props.mode || 'htmlmixed';
+		const codemirrorSettings = codeEditor.defaultSettings.codemirror;
+		this.editor = codeEditor.initialize( this.props.id, {
+			codemirror: {
+				...codemirrorSettings,
+				mode,
+			},
+		} );
 		this.updateValue();
 		this.editor.codemirror.on( 'keyHandled', ( cm, name, event ) => event.stopPropagation() );
 	}
